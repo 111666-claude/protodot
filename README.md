@@ -31,6 +31,26 @@ if you installed `protodot` from the binary distribution - you may want to extra
    * `-select .one.two;three.four` - name(s) of the selected elements to show, optional, explained later in this document
    * `-output save-it-here` - name of the output file, optional
    * `-inc /abc/def;/xyz` - (semicolon separated) list of the include directories, optional
+   * `-diff new.proto` - compare `-src` (old) against this file (new) and produce a schema diff diagram, optional
+   * `-diffonly` - in diff mode, limit the output to the affected dependency subgraph, optional
+
+
+## schema diff
+when `-diff` is used together with `-src`, `protodot` compares the two descriptors
+(old vs new) by fully qualified name and produces a single `.dot` diagram where:
+
+   * added, removed, changed and renamed messages/enums are rendered in different styles (see the legend on the diagram)
+   * field-level changes (added/removed fields, type changes such as `int32 -> int64`) are highlighted inside the message bodies
+   * added/removed dependency edges are drawn in green/dashed-red correspondingly
+   * unchanged nodes keep their original declaration order and stable, name-derived node IDs
+   * renames (same shape, same package, different name) are detected and reported, same simple names in different packages are kept apart, missing imports and incompatible descriptors are reported explicitly
+
+use `-diffonly` to limit the diagram to the affected nodes: everything that changed,
+everything those nodes directly depend on, and everything that (transitively) depends on them.
+
+```
+   ./protodot -src old/shop.proto -diff new/shop.proto [-diffonly] [-output my-diff]
+```
 
 
 ## configuration file

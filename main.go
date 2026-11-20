@@ -1398,6 +1398,8 @@ var (
 	g_generated  = flag.String("generated", "", "Where to store generated files (overwrites config.locations.generated)")
 	g_grpc       = flag.String("grpc", "", "Port to listen, e.g. :50051")
 	g_action     = flag.String("action", "", "custom action to run upon completion (overwrites config.locations.action)")
+	g_diff       = flag.String("diff", "", "Second (new) .proto file to compare -src against (schema diff mode)")
+	g_diffOnly   = flag.Bool("diffonly", false, "In diff mode, limit the output to the affected dependency subgraph")
 )
 
 // ======================================================================================================================
@@ -1459,6 +1461,19 @@ func main() {
 	}
 
 	createDirIfMissing(getTargetPath())
+
+	if len(*g_diff) > 0 {
+		// schema diff mode: compare -src (old) against -diff (new)
+		if len(*g_source) == 0 {
+			status("No source file specified (diff mode needs both -src and -diff).")
+			flag.Usage()
+			return
+		}
+		if err := runDiff(*g_source, *g_diff, *g_diffOnly); err != nil {
+			status("schema diff failed:", err)
+		}
+		return
+	}
 
 	if len(*g_action) > 0 {
 		support.SetLocation(g_config, "action", *g_action)

@@ -1,0 +1,42 @@
+syntax = "proto3";
+package shop.v1;
+
+import "common.proto";
+
+// same simple name as common.v1.Address, different package
+message Address {
+  string raw = 1;
+}
+
+message Order {
+  message Item {
+    string sku = 1;
+    int32 quantity = 2;
+    common.v1.Money price = 3;
+  }
+  string id = 1;
+  repeated Item items = 2;
+  common.v1.Address shipping = 3;
+  Address billing = 4;
+  Customer owner = 5;
+  string legacy_note = 6;
+}
+
+message Customer {
+  string name = 1;
+  repeated Order orders = 2;
+}
+
+message Legacy {
+  string old_field = 1;
+  common.v1.Money total = 2;
+}
+
+message RenameMe {
+  string a = 1;
+  int32 b = 2;
+}
+
+message Unrelated {
+  string note = 1;
+}

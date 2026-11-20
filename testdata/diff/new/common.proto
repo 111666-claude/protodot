@@ -1,0 +1,24 @@
+syntax = "proto3";
+package common.v1;
+
+enum Status {
+  UNKNOWN = 0;
+  OK = 1;
+  FAILED = 2;
+}
+
+message Address {
+  string street = 1;
+  string city = 2;
+  string zip = 3;
+}
+
+message Money {
+  int64 cents = 1;
+  string currency = 2;
+}
+
+message Geo {
+  double lat = 1;
+  double lng = 2;
+}

@@ -1,0 +1,8 @@
+syntax = "proto3";
+package lost.v1;
+
+import "nonexistent.proto";
+
+message Orphan {
+  string id = 1;
+}

@@ -1,0 +1,6 @@
+syntax = "proto3";
+package tiny.v1;
+
+message Payload {
+  string a = 1;
+}
